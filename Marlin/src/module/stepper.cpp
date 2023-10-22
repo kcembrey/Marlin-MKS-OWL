@@ -153,6 +153,9 @@ Stepper stepper; // Singleton
   #endif
 #endif
 
+#if BOTH(MKS_TEST, HAS_TFT_LVGL_UI)
+  extern uint8_t mks_test_flag;
+#endif
 axis_flags_t Stepper::axis_enabled; // {0}
 
 // private:
@@ -1494,6 +1497,19 @@ void Stepper::isr() {
     // Enable ISRs to reduce USART processing latency
     ENABLE_ISRS();
 
+    #if BOTH(MKS_TEST, HAS_TFT_LVGL_UI)
+      if(mks_test_flag == 0x1e) {
+        WRITE(X_STEP_PIN, HIGH);
+        WRITE(Y_STEP_PIN, HIGH);
+        WRITE(Z_STEP_PIN, HIGH);
+        WRITE(E0_STEP_PIN, HIGH);
+        #if !MB(MKS_ROBIN_E3P)
+          WRITE(E1_STEP_PIN, HIGH);
+        #endif
+        //WRITE(E2_STEP_PIN, HIGH);
+      }
+    #endif
+
     if (!nextMainISR) pulse_phase_isr();                            // 0 = Do coordinated axes Stepper pulses
 
     #if ENABLED(LIN_ADVANCE)
@@ -1568,6 +1584,18 @@ void Stepper::isr() {
     // Compute the tick count for the next ISR
     next_isr_ticks += interval;
 
+    #if BOTH(MKS_TEST, HAS_TFT_LVGL_UI)
+      if(mks_test_flag == 0x1e) {
+	     WRITE(X_STEP_PIN, LOW);
+	     WRITE(Y_STEP_PIN, LOW);
+	     WRITE(Z_STEP_PIN, LOW);
+	     WRITE(E0_STEP_PIN, LOW);
+       #if !MB(MKS_ROBIN_E3P)
+	      WRITE(E1_STEP_PIN, LOW);
+       #endif
+	     //WRITE(E2_STEP_PIN, LOW);
+      }
+    #endif
     /**
      * The following section must be done with global interrupts disabled.
      * We want nothing to interrupt it, as that could mess the calculations

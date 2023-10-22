@@ -34,6 +34,8 @@
 
 #include "../../../module/temperature.h"
 #include "../../../inc/MarlinConfig.h"
+#include "../../../sd/cardreader.h"
+#include "../../../gcode/queue.h"
 
 #if ENABLED(TOUCH_SCREEN_CALIBRATION)
   #include "../../tft_io/touch_calibration.h"
@@ -71,12 +73,17 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
   lv_clear_ready_print();
   switch (obj->mks_obj_id) {
-    case ID_TOOL:   lv_draw_tool(); break;
+    case ID_TOOL: 
+        lv_draw_tool();
+       #if ENABLED(MKS_TEST)
+       mks_test_flag = 0; 
+       #endif
+       break;// lv_draw_tool(); break; 
     case ID_SET:    lv_draw_set(); break;
     case ID_INFO_EXT:  uiCfg.curTempType = 0; lv_draw_preHeat(); break;
     case ID_INFO_BED:  uiCfg.curTempType = 1; lv_draw_preHeat(); break;
     case ID_INFO_FAN:  lv_draw_fan(); break;
-    case ID_PRINT: TERN(MULTI_VOLUME, lv_draw_media_select(), lv_draw_print_file()); break;
+    case ID_PRINT: card.changeMedia(&card.media_driver_usbFlash); lv_draw_print_file(); break;
   }
 }
 
@@ -182,6 +189,10 @@ void lv_draw_ready_print() {
 
     lv_obj_set_pos(det_info, 20, 145);
     lv_label_set_text(det_info, " ");
+
+    #if ENABLED(MKS_TEST)
+    mks_gpio_test();
+    #endif
   }
   else {
     lv_big_button_create(scr, "F:/bmp_tool.bin", main_menu.tool, 20, 90, event_handler, ID_TOOL);

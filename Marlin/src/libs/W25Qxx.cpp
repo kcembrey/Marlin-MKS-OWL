@@ -32,42 +32,18 @@ W25QXXFlash W25QXX;
   #define NC -1
 #endif
 
-MarlinSPI W25QXXFlash::mySPI(SPI_FLASH_MOSI_PIN, SPI_FLASH_MISO_PIN, SPI_FLASH_SCK_PIN, NC);
-
+MarlinSPI W25QXXFlash::mySPI(2);
 #define SPI_FLASH_CS_H() OUT_WRITE(SPI_FLASH_CS_PIN, HIGH)
 #define SPI_FLASH_CS_L() OUT_WRITE(SPI_FLASH_CS_PIN, LOW)
 
 bool flash_dma_mode = true;
 
 void W25QXXFlash::init(uint8_t spiRate) {
-
+  class SPISettings spiConfig;
   OUT_WRITE(SPI_FLASH_CS_PIN, HIGH);
 
-  /**
-   * STM32F1 APB2 = 72MHz, APB1 = 36MHz, max SPI speed of this MCU if 18Mhz
-   * STM32F1 has 3 SPI ports, SPI1 in APB2, SPI2/SPI3 in APB1
-   * so the minimum prescale of SPI1 is DIV4, SPI2/SPI3 is DIV2
-   */
-  #if SPI_DEVICE == 1
-    #define SPI_CLOCK_MAX SPI_CLOCK_DIV4
-  #else
-    #define SPI_CLOCK_MAX SPI_CLOCK_DIV2
-  #endif
-  uint8_t clock;
-  switch (spiRate) {
-    case SPI_FULL_SPEED:    clock = SPI_CLOCK_MAX;  break;
-    case SPI_HALF_SPEED:    clock = SPI_CLOCK_DIV4; break;
-    case SPI_QUARTER_SPEED: clock = SPI_CLOCK_DIV8; break;
-    case SPI_EIGHTH_SPEED:  clock = SPI_CLOCK_DIV16; break;
-    case SPI_SPEED_5:       clock = SPI_CLOCK_DIV32; break;
-    case SPI_SPEED_6:       clock = SPI_CLOCK_DIV64; break;
-    default:                clock = SPI_CLOCK_DIV2;// Default from the SPI library
-  }
-
-  mySPI.setClockDivider(clock);
-  mySPI.setBitOrder(MSBFIRST);
-  mySPI.setDataMode(SPI_MODE0);
-  mySPI.begin();
+  spiConfig = SPISettings(20000000,kSPI_MsbFirst,SPI_MODE0,kSPI_Data8Bits,false);
+  mySPI.beginTransaction(spiConfig);
 }
 
 /**
@@ -76,12 +52,12 @@ void W25QXXFlash::init(uint8_t spiRate) {
  * @return Byte received
  */
 uint8_t W25QXXFlash::spi_flash_Rec() {
-  const uint8_t returnByte = mySPI.transfer(0xFF);
+  const uint8_t returnByte = mySPI.transfer8Reflash(0xFF);
   return returnByte;
 }
 
 uint8_t W25QXXFlash::spi_flash_read_write_byte(uint8_t data) {
-  const uint8_t returnByte = mySPI.transfer(data);
+  const uint8_t returnByte = mySPI.transfer8Reflash(data);
   return returnByte;
 }
 
@@ -94,8 +70,53 @@ uint8_t W25QXXFlash::spi_flash_read_write_byte(uint8_t data) {
  *
  * @details Uses DMA
  */
+
 void W25QXXFlash::spi_flash_Read(uint8_t *buf, uint16_t nbyte) {
-  mySPI.dmaTransfer(0, const_cast<uint8_t*>(buf), nbyte);
+  // mySPI.TransferNotdma(0, const_cast<uint8_t*>(buf), nbyte);//caden
+  
+    #define MAX_NotDMA_Flash (0x400 - 1)
+    uint8_t test_tx_buff[1024] = {0xFF}; // add by dylan
+    while (nbyte > 0) {
+      mySPI.TransferMulflash(&test_tx_buff[0], 
+                              buf,(nbyte > MAX_NotDMA_Flash ? MAX_NotDMA_Flash : nbyte)); // add by dylan
+      buf+=MAX_NotDMA_Flash;
+      nbyte = nbyte > MAX_NotDMA_Flash ? nbyte - MAX_NotDMA_Flash : 0;
+    }
+    #undef MAX_NotDMA_Flash
+
+    // #define MAX_NotDMA_Flash (0x400 - 1)
+    // while (nbyte > 0) {
+    //   mySPI.TransferMulflash(NULL,buf,(nbyte > MAX_NotDMA_Flash ? MAX_NotDMA_Flash : nbyte));
+    //   buf+=MAX_NotDMA_Flash;
+    //   nbyte = nbyte > MAX_NotDMA_Flash ? nbyte - MAX_NotDMA_Flash : 0;
+    // }
+    // #undef MAX_NotDMA_Flash
+    // uint16_t i;
+    // uint8_t rx[2];
+    // if(nbyte % 2 != 0)
+    // {
+    //     for(i=0;i<nbyte;i++)
+    //     {
+    //       *buf = mySPI.transfer(NULL);
+    //       buf++;
+    //     }     
+    // }
+    // else
+    // {
+    //     for(i=0;i<nbyte;i+=2)
+    //     {
+    //       mySPI.TransferNotdma_rec(rx,2);
+    //       buf[i] = rx[0];
+    //       buf[i+1] = rx[1];
+    //     }       
+    // }
+
+  // uint16_t i;
+  // for(i=0;i<nbyte;i++)
+  // {
+  //   *buf = mySPI.transfer(NULL);
+  //    buf++;
+  // }
 }
 
 /**
@@ -105,7 +126,7 @@ void W25QXXFlash::spi_flash_Read(uint8_t *buf, uint16_t nbyte) {
  *
  * @details
  */
-void W25QXXFlash::spi_flash_Send(uint8_t b) { mySPI.transfer(b); }
+void W25QXXFlash::spi_flash_Send(uint8_t b) { mySPI.transfer8Reflash(b); }
 
 /**
  * @brief  Write token and then write from 512 byte buffer to SPI (for SD card)
@@ -116,8 +137,9 @@ void W25QXXFlash::spi_flash_Send(uint8_t b) { mySPI.transfer(b); }
  * @details Use DMA
  */
 void W25QXXFlash::spi_flash_SendBlock(uint8_t token, const uint8_t *buf) {
-  mySPI.transfer(token);
-  mySPI.dmaSend(const_cast<uint8_t*>(buf), 512);
+  int16_t i;
+  mySPI.transfer8Reflash(token);
+  mySPI.TransferMulflash(const_cast<uint8_t*>(buf),NULL, 512);//caden
 }
 
 uint16_t W25QXXFlash::W25QXX_ReadID(void) {
@@ -158,14 +180,16 @@ void W25QXXFlash::SPI_FLASH_WaitForWriteEnd(void) {
   SPI_FLASH_CS_L();
   // Send "Read Status Register" instruction
   spi_flash_Send(W25X_ReadStatusReg);
-
+//  SERIAL_ECHO_MSG("4_8");
   // Loop as long as the memory is busy with a write cycle
-  do
+  do{
     /* Send a dummy byte to generate the clock needed by the FLASH
     and put the value of the status register in FLASH_Status variable */
+    // SERIAL_IMPL.printf("FLASH_Status:%x\r\n",FLASH_Status);
     FLASH_Status = spi_flash_Rec();
-  while ((FLASH_Status & WIP_Flag) == 0x01); // Write in progress
-
+    // SERIAL_IMPL.printf("FLASH_Status:%x\r\n",FLASH_Status);
+    }while ((FLASH_Status & WIP_Flag) == 0x01); // Write in progress
+  // SERIAL_ECHO_MSG("4_9");
   // Deselect the FLASH: Chip Select high
   SPI_FLASH_CS_H();
 }
@@ -173,23 +197,30 @@ void W25QXXFlash::SPI_FLASH_WaitForWriteEnd(void) {
 void W25QXXFlash::SPI_FLASH_SectorErase(uint32_t SectorAddr) {
   // Send write enable instruction
   SPI_FLASH_WriteEnable();
-
+  // SERIAL_ECHO_MSG("4_1");
   // Sector Erase
   // Select the FLASH: Chip Select low
   SPI_FLASH_CS_L();
+  // SERIAL_ECHO_MSG("4_2");
   // Send Sector Erase instruction
   spi_flash_Send(W25X_SectorErase);
+  // SERIAL_ECHO_MSG("4_3");
   // Send SectorAddr high nybble address byte
   spi_flash_Send((SectorAddr & 0xFF0000) >> 16);
+  // SERIAL_ECHO_MSG("4_4");
   // Send SectorAddr medium nybble address byte
   spi_flash_Send((SectorAddr & 0xFF00) >> 8);
+  // SERIAL_ECHO_MSG("4_5");
   // Send SectorAddr low nybble address byte
   spi_flash_Send(SectorAddr & 0xFF);
+  // SERIAL_ECHO_MSG("4_6");
   // Deselect the FLASH: Chip Select high
 
   SPI_FLASH_CS_H();
+  //  SERIAL_ECHO_MSG("4_7");
   // Wait the end of Flash writing
   SPI_FLASH_WaitForWriteEnd();
+   
 }
 
 void W25QXXFlash::SPI_FLASH_BlockErase(uint32_t BlockAddr) {
@@ -367,6 +398,7 @@ void W25QXXFlash::SPI_FLASH_BufferRead(uint8_t *pBuffer, uint32_t ReadAddr, uint
   spi_flash_Send(ReadAddr & 0xFF);
 
   if (NumByteToRead <= 32 || !flash_dma_mode) {
+
     while (NumByteToRead--) { // While there is data to be read
       // Read a byte from the FLASH
       *pBuffer = spi_flash_Rec();
@@ -375,7 +407,10 @@ void W25QXXFlash::SPI_FLASH_BufferRead(uint8_t *pBuffer, uint32_t ReadAddr, uint
     }
   }
   else
+  {
+
     spi_flash_Read(pBuffer, NumByteToRead);
+  }
 
   SPI_FLASH_CS_H();
 }

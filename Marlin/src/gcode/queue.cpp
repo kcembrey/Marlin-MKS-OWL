@@ -36,7 +36,9 @@ GCodeQueue queue;
 #include "../module/temperature.h"
 #include "../MarlinCore.h"
 #include "../core/bug_on.h"
-
+#if ENABLED(TFT_LVGL_UI)
+#include "../Marlin/src/lcd/extui/mks_ui/draw_ui.h"
+#endif
 #if ENABLED(PRINTER_EVENT_LEDS)
   #include "../feature/leds/printer_event_leds.h"
 #endif
@@ -278,6 +280,10 @@ void GCodeQueue::flush_and_request_resend(const serial_index_t serial_ind) {
   SERIAL_ECHOLNPGM(STR_RESEND, serial_state[serial_ind.index].last_N + 1);
   SERIAL_ECHOLNPGM(STR_OK);
 }
+
+uint8_t av = 0;
+
+#include "HardwareSerial.h"
 
 static bool serial_data_available(serial_index_t index) {
   const int a = SERIAL_IMPL.available(index);
@@ -552,7 +558,7 @@ void GCodeQueue::get_serial_commands() {
    */
   inline void GCodeQueue::get_sdcard_commands() {
     static uint8_t sd_input_state = PS_NORMAL;
-
+    static bool die = false;
     // Get commands if there are more in the file
     if (!IS_SD_FETCHING()) return;
 
@@ -560,7 +566,22 @@ void GCodeQueue::get_serial_commands() {
     while (!ring_buffer.full() && !card.eof()) {
       const int16_t n = card.get();
       const bool card_eof = card.eof();
-      if (n < 0 && !card_eof) { SERIAL_ERROR_MSG(STR_SD_ERR_READ); continue; }
+      if (n < 0 && !card_eof) 
+      { 
+        SERIAL_ERROR_MSG(STR_SD_ERR_READ); 
+        #if ENABLED(TFT_LVGL_UI)
+        if(!die)
+        {
+            die = true;
+            card.abortFilePrintSoon();
+            thermalManager.disable_all_heaters();
+            clear_cur_ui();
+            lv_draw_dialog(DIALOG_TYPE_READ_FILE_ERR);
+            break;
+        }
+        #endif
+        continue; 
+      }
 
       CommandLine &command = ring_buffer.commands[ring_buffer.index_w];
       const char sd_char = (char)n;

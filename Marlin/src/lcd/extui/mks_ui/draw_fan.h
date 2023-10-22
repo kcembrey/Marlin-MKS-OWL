@@ -20,7 +20,7 @@
  *
  */
 #pragma once
-
+#include "WMath.h"
 #ifdef __cplusplus
   extern "C" {
 #endif

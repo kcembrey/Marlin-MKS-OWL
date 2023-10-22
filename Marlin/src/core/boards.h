@@ -441,6 +441,13 @@
 
 #define BOARD_AGCM4_RAMPS_144         6100  // RAMPS 1.4.4
 
+
+//
+// ARM Cortex M33
+//
+
+#define BOARD_MKS_OWL                 2512  // MKS OWL 
+
 //
 // Custom board
 //

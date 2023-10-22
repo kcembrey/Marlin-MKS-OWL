@@ -31,6 +31,8 @@
 #include "temperature.h"
 #include "../lcd/marlinui.h"
 
+#include "../HAL/LPC5528/fastio.h"
+
 #if ENABLED(ENDSTOP_INTERRUPTS_FEATURE)
   #include HAL_PATH(../HAL, endstop_interrupts.h)
 #endif

@@ -725,6 +725,9 @@
 #elif MB(AGCM4_RAMPS_144)
   #include "samd/pins_RAMPS_144.h"              // SAMD51                                 env:SAMD51_grandcentral_m4
 
+#elif MB(MKS_OWL)
+  #include "lpc5528/pins_MKS_OWL.h"             // LPC5528                                env:MKS_OWL                                            
+
 //
 // Custom board (with custom PIO env)
 //

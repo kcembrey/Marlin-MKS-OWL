@@ -106,7 +106,8 @@ if (lcd_id != 0xFFFFFFFF) return;
     write_esc_sequence(ili9488_init);
   #elif TFT_DRIVER == AUTO // autodetect
 
-    lcd_id = io.GetID() & 0xFFFF;
+    // lcd_id = io.GetID() & 0xFFFF;
+    lcd_id = 0x7796;
 
     switch (lcd_id) {
       case LTDC_RGB:

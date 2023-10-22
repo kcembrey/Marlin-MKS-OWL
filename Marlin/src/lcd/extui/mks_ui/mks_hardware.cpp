@@ -79,7 +79,7 @@
   #define ESTATE(S) (READ(S##_PIN) != S##_ENDSTOP_INVERTING)
 
   void test_gpio_readlevel_L() {
-    WRITE(WIFI_IO0_PIN, HIGH);
+    // WRITE(WIFI_IO0_PIN, HIGH);
     delay(10);
     pw_det_sta = (READ(MKS_TEST_POWER_LOSS_PIN) == LOW);
     pw_off_sta = (READ(MKS_TEST_PS_ON_PIN) == LOW);
@@ -120,7 +120,7 @@
   }
 
   void test_gpio_readlevel_H() {
-    WRITE(WIFI_IO0_PIN, LOW);
+    // WRITE(WIFI_IO0_PIN, LOW);
     delay(10);
     pw_det_sta = (READ(MKS_TEST_POWER_LOSS_PIN) == HIGH);
     pw_off_sta = (READ(MKS_TEST_PS_ON_PIN) == HIGH);
@@ -163,7 +163,7 @@
   void init_test_gpio() {
     endstops.init();
 
-    SET_OUTPUT(WIFI_IO0_PIN);
+    // SET_OUTPUT(WIFI_IO0_PIN);
 
     #if PIN_EXISTS(MT_DET_1)
       SET_INPUT_PULLUP(MT_DET_1_PIN);
@@ -722,13 +722,14 @@ void disp_assets_update_progress(FSTR_P const fmsg) {
   disp_string(100, 165, buf, 0xFFFF, 0x0000);
 }
 
-#if BOTH(MKS_TEST, SDSUPPORT)
+#if BOTH(MKS_TEST, USB_FLASH_DRIVE_SUPPORT)
   uint8_t mks_test_flag = 0;
   const char *MKSTestPath = "MKS_TEST";
   void mks_test_get() {
     SdFile dir, root = card.getroot();
     if (dir.open(&root, MKSTestPath, O_RDONLY))
       mks_test_flag = 0x1E;
+      init_test_gpio();
   }
 #endif
 

@@ -46,7 +46,7 @@ extern "C" {
  *  interface for SPI DMA transfer.
  *
  */
-
+using MarlinSPI = SPIClass; //caden
 #define DATA_SIZE_8BIT SPI_DATASIZE_8BIT
 #define DATA_SIZE_16BIT SPI_DATASIZE_16BIT
 

@@ -771,7 +771,7 @@ constexpr uint8_t epps = ENCODER_PULSES_PER_STEP;
       // Add a manual move to the queue?
       if (axis != NO_AXIS_ENUM && ELAPSED(millis(), start_time) && !planner.is_full()) {
 
-        const feedRate_t fr_mm_s = (axis < LOGICAL_AXES) ? manual_feedrate_mm_s[axis] : XY_PROBE_FEEDRATE_MM_S;
+        const feedRate_t fr_mm_s = (axis <= LOGICAL_AXES) ? manual_feedrate_mm_s[axis] : XY_PROBE_FEEDRATE_MM_S;
 
         #if IS_KINEMATIC
 
@@ -1553,13 +1553,11 @@ constexpr uint8_t epps = ENCODER_PULSES_PER_STEP;
     TERN_(HAS_LCD_MENU, return_to_status());
   }
 
-  #if BOTH(HAS_LCD_MENU, PSU_CONTROL)
-
+  #if BOTH(PSU_CONTROL, PS_OFF_CONFIRM)
     void MarlinUI::poweroff() {
-      queue.inject(F("M81" TERN_(POWER_OFF_WAIT_FOR_COOLDOWN, "S")));
-      return_to_status();
+      queue.inject(F("M81"));
+      goto_previous_screen();
     }
-
   #endif
 
   void MarlinUI::flow_fault() {

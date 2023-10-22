@@ -20,7 +20,7 @@
  *
  */
 #pragma once
-
+#include "../../inc/MarlinConfig.h"
 #include "i2s.h"
 
 /**
@@ -91,3 +91,6 @@
 // TWI (I2C)
 #define SCL        5
 #define SDA        4
+
+
+#endif
