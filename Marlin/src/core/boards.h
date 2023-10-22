@@ -459,6 +459,13 @@
 #define BOARD_BRICOLEMON_V1_0         6101  // Bricolemon
 #define BOARD_BRICOLEMON_LITE_V1_0    6102  // Bricolemon Lite
 
+
+//
+// ARM Cortex M33
+//
+
+#define BOARD_MKS_OWL                 2512  // MKS OWL 
+
 //
 // Custom board
 //

@@ -111,6 +111,10 @@ void analogWrite(const pin_t pin, const uint16_t value, const uint32_t freq=PWM_
   void Write_EXIO(uint8_t IO, uint8_t v);
 #endif
 
+#if ENABLED(USE_ESP32_EXIO)
+  void Write_EXIO(uint8_t IO, uint8_t v);
+#endif
+
 //
 // Delay in cycles (used by DELAY_NS / DELAY_US)
 //

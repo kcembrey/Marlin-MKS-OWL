@@ -90,6 +90,16 @@
   #endif
 #endif
 
+#ifdef SERIAL_PORT_3
+  #if SERIAL_PORT_3 == -1
+    #define MYSERIAL3 MSerial0
+  #elif WITHIN(SERIAL_PORT_3, 1, 6)
+    #define MYSERIAL3 MSERIAL(SERIAL_PORT_3)
+  #else
+    #error "SERIAL_PORT_3 must be from 1 to 6. You can also use -1 if the board supports Native USB."
+  #endif
+#endif
+
 #ifdef MMU2_SERIAL_PORT
   #if WITHIN(MMU2_SERIAL_PORT, 1, 6)
     #define MMU2_SERIAL MSERIAL(MMU2_SERIAL_PORT)
@@ -152,6 +162,12 @@ typedef libServo hal_servo_t;
 // ------------------------
 // ADC
 // ------------------------
+
+#ifdef ADC_RESOLUTION
+  #define HAL_ADC_RESOLUTION ADC_RESOLUTION
+#else
+  #define HAL_ADC_RESOLUTION 12
+#endif
 
 #ifdef ADC_RESOLUTION
   #define HAL_ADC_RESOLUTION ADC_RESOLUTION

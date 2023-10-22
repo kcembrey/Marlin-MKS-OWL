@@ -1734,6 +1734,30 @@ void prepare_line_to_destination() {
             stepperBackoutDir = IF_DISABLED(INVERT_K_DIR, -)effectorBackoutDir;
             break;
         #endif
+        #ifdef I_MICROSTEPS
+          case I_AXIS:
+            phasePerUStep = PHASE_PER_MICROSTEP(I);
+            phaseCurrent = stepperI.get_microstep_counter();
+            effectorBackoutDir = -I_HOME_DIR;
+            stepperBackoutDir = INVERT_I_DIR ? effectorBackoutDir : -effectorBackoutDir;
+            break;
+        #endif
+        #ifdef J_MICROSTEPS
+          case J_AXIS:
+            phasePerUStep = PHASE_PER_MICROSTEP(J);
+            phaseCurrent = stepperJ.get_microstep_counter();
+            effectorBackoutDir = -J_HOME_DIR;
+            stepperBackoutDir = INVERT_J_DIR ? effectorBackoutDir : -effectorBackoutDir;
+            break;
+        #endif
+        #ifdef K_MICROSTEPS
+          case K_AXIS:
+            phasePerUStep = PHASE_PER_MICROSTEP(K);
+            phaseCurrent = stepperK.get_microstep_counter();
+            effectorBackoutDir = -K_HOME_DIR;
+            stepperBackoutDir = INVERT_K_DIR ? effectorBackoutDir : -effectorBackoutDir;
+            break;
+        #endif
         default: return;
       }
 

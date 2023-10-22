@@ -49,7 +49,7 @@
 #include "Conditionals_LCD.h"
 
 #ifndef __MARLIN_DEPS__
-  #include HAL_PATH(../HAL, inc/Conditionals_LCD.h)
+  // #include HAL_PATH(../HAL, inc/Conditionals_LCD.h)    // sola-2022-01-11
 #endif
 
 #include "../core/drivers.h"
@@ -58,5 +58,5 @@
 #include "Conditionals_adv.h"
 
 #ifndef __MARLIN_DEPS__
-  #include HAL_PATH(../HAL, inc/Conditionals_adv.h)
+  // #include HAL_PATH(../HAL, inc/Conditionals_adv.h)     // sola-2022-01-11
 #endif

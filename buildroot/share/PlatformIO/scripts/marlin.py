@@ -8,6 +8,8 @@ from pathlib import Path
 from SCons.Script import DefaultEnvironment
 env = DefaultEnvironment()
 
+from os.path import join
+
 def copytree(src, dst, symlinks=False, ignore=None):
     for item in src.iterdir():
         if item.is_dir():

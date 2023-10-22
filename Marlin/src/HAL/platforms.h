@@ -37,6 +37,12 @@
   #define HAL_PATH(PATH, NAME) XSTR(PATH/LPC1768/NAME)
 #elif defined(__STM32F1__) || defined(TARGET_STM32F1)
   #define HAL_PATH(PATH, NAME) XSTR(PATH/STM32F1/NAME)
+// #elif defined(ARDUINOLPC55)
+#elif 1
+  #define HAL_PATH(PATH, NAME) XSTR(PATH/LPC5528/NAME)
+  #ifndef HAS_LPC55XX
+    #define HAS_LPC55XX   // set define with LPC5528 and LPC5516 for MKS
+  #endif
 #elif defined(ARDUINO_ARCH_STM32)
   #ifndef HAL_STM32
     #define HAL_STM32

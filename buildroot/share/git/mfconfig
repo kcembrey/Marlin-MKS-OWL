@@ -120,6 +120,15 @@ if [[ $ACTION == "init" ]]; then
   # DEBUG: Commit the reset for review
   ((COMMIT_STEPS)) && git add . >/dev/null && git commit -m "Reset configs..." >/dev/null
 
+  # Reset all TPARA configs to the default cartesian
+  find "$CEXA/TPARA" -name $BC \
+    | while read -d $'\0' F ; do cp "$CDEF/$BC" "$F" ; done
+  find "$CEXA/TPARA" -name $AC \
+    | while read -d $'\0' F ; do cp "$CDEF/$AC" "$F" ; done
+
+  # DEBUG: Commit the TPARA reset for review
+  ((COMMIT_STEPS)) && git add . >/dev/null && git commit -m "Reset TPARA..." >/dev/null
+
   # Update the %VERSION% in the README.md file
   VERS=$( echo $EXPORT | $SED 's/release-//' )
   eval "${SED} -E -i~ -e 's/%VERSION%/$VERS/g' README.md"

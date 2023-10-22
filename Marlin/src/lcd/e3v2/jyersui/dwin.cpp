@@ -1688,7 +1688,6 @@ void CrealityDWINClass::Menu_Item_Handler(uint8_t menu, uint8_t item, bool draw/
             else
               Draw_Menu(Prepare, PREPARE_PREHEAT);
             break;
-
           case PREHEAT_MODE:
             if (draw) {
               Draw_Menu_Item(row, ICON_Homing, F("Preheat Mode"));

@@ -537,6 +537,7 @@ bool Probe::probe_down_to_z(const_float_t z, const_feedRate_t fr_mm_s) {
     if (test_sensitivity.z) stealth_states.z = tmc_enable_stallguard(stepperZ);   // All machines will check Z-DIAG for stall
     endstops.set_homing_current(true);                                            // The "homing" current also applies to probing
     endstops.enable(true);
+    set_homing_current(true);                                 // The "homing" current also applies to probing
   #endif
 
   TERN_(HAS_QUIET_PROBING, set_probing_paused(true));

@@ -35,7 +35,7 @@
 #include "HAL/shared/cpu_exception/exception_hook.h"
 
 #ifdef ARDUINO
-  #include <pins_arduino.h>
+  //#include <pins_arduino.h>
 #endif
 #include <math.h>
 
@@ -255,6 +255,9 @@
 PGMSTR(M112_KILL_STR, "M112 Shutdown");
 
 MarlinState marlin_state = MF_INITIALIZING;
+extern bool once_flag;
+extern bool gcode_preview_over, flash_preview_begin, default_preview_flg;
+
 
 // For M109 and M190, this flag may be cleared (by M108) to exit the wait loop
 bool wait_for_heatup = true;
@@ -381,6 +384,27 @@ void startOrResumeJob() {
   }
 
   inline void finishSDPrinting() {
+    if (marlin_state == MF_SD_COMPLETE) {
+      if (once_flag == 0) {
+        stop_print_time();
+
+        flash_preview_begin = false;
+        default_preview_flg = false;
+        clear_cur_ui();
+        lv_draw_dialog(DIALOG_TYPE_FINISH_PRINT);
+
+        once_flag = true;
+
+        #if HAS_SUICIDE
+          if (gCfgItems.finish_power_off) {
+            gcode.process_subcommands_now(F("M1001"));
+            queue.inject(F("M81"));
+            marlin_state = MF_RUNNING;
+          }
+        #endif
+      }
+    }
+
     if (queue.enqueue_one(F("M1001"))) {  // Keep trying until it gets queued
       marlin_state = MF_RUNNING;          // Signal to stop trying
       TERN_(PASSWORD_AFTER_SD_PRINT_END, password.lock_machine());
@@ -832,7 +856,7 @@ void idle(bool no_stepper_sleep/*=false*/) {
   TERN_(HAS_BEEPER, buzzer.tick());
 
   // Handle UI input / draw events
-  TERN(DWIN_CREALITY_LCD, DWIN_Update(), ui.update());
+  TERN(HAS_DWIN_E3V2_BASIC, DWIN_Update(), ui.update());
 
   // Run i2c Position Encoders
   #if ENABLED(I2C_POSITION_ENCODERS)
@@ -1117,6 +1141,10 @@ inline void tmc_standby_setup() {
  *  - Open Touch Screen Calibration screen, if not calibrated
  *  - Set Marlin to RUNNING State
  */
+#define MARLIN_FUNC (1)
+// uint16_t buffer1[1024];
+
+#if MARLIN_FUNC
 void setup() {
   #ifdef FASTIO_INIT
     FASTIO_INIT();
@@ -1145,6 +1173,7 @@ void setup() {
   #define SETUP_RUN(C) do{ SETUP_LOG(STRINGIFY(C)); C; }while(0)
 
   MYSERIAL1.begin(BAUDRATE);
+
   millis_t serial_connect_timeout = millis() + 1000UL;
   while (!MYSERIAL1.connected() && PENDING(millis(), serial_connect_timeout)) { /*nada*/ }
 
@@ -1598,9 +1627,16 @@ void setup() {
 
   #if HAS_TFT_LVGL_UI
     #if ENABLED(SDSUPPORT)
-      if (!card.isMounted()) SETUP_RUN(card.mount()); // Mount SD to load graphics and fonts
+      // card.changeMedia(&card.media_driver_usbFlash);      // Default use USB
+      // if (!card.isMounted()) SETUP_RUN(card.mount()); // Mount SD to load graphics and fonts
+      
+      #if ENABLED(MULTI_VOLUME)
+        card.changeMedia(&card.media_driver_sdcard);
+      #endif
+    
     #endif
     SETUP_RUN(tft_lvgl_init());
+
   #endif
 
   #if BOTH(HAS_WIRED_LCD, SHOW_BOOTSCREEN)
@@ -1629,8 +1665,102 @@ void setup() {
 
   marlin_state = MF_RUNNING;
 
+#define USB_MSC_TEST 0
+#if USB_MSC_TEST
+#define TEST_SECTOR_START_ADDR  (0U)
+#define TEST_SECTOR_SIZE   (512U)
+#define TEST_SECTOR_NUM    (1U)
+#define TEST_BUF_SIZE   (TEST_SECTOR_SIZE*TEST_SECTOR_NUM)
+
+uint8_t test_write_buf[TEST_BUF_SIZE];
+uint8_t test_read_buf[TEST_BUF_SIZE];
+uint8_t test_done = false;
+
+uint32_t delay_cnt = 10000;
+    for(int i=0;i<TEST_BUF_SIZE/2;i++){
+      *(((uint16_t*)test_write_buf)+i) = i;
+    }
+  udisk.Init(0,0,false); // dylan
+  while(delay_cnt--)
+  {
+    if(udisk.LUNIsGood(0))
+    {
+      delay_cnt = 0;
+      if(!udisk.Write(0,TEST_SECTOR_START_ADDR,TEST_SECTOR_SIZE,TEST_SECTOR_NUM,test_write_buf))
+      {
+        SERIAL_ECHOLNPGM("USB wrtie success");
+        if(!udisk.Read(0,TEST_SECTOR_START_ADDR,TEST_SECTOR_SIZE,TEST_SECTOR_NUM,test_read_buf))
+        {
+        SERIAL_ECHOLNPGM("USB read success");
+        }
+        else{
+        SERIAL_ECHOLNPGM("USB read failed");
+        }
+      }
+      else{
+        
+        SERIAL_ECHOLNPGM("USB write failed");
+      }
+  }
+  }
+  
+#endif
+
   SETUP_LOG("setup() completed.");
+
 }
+#else
+#define USB_CDC_TEST 0
+#define USB_MSC_TEST 1
+#define SD_SCREEN_FALSH_TEST 0
+
+#if USB_MSC_TEST
+#define TEST_SECTOR_START_ADDR  (1U)
+#define TEST_SECTOR_SIZE   (512U)
+#define TEST_SECTOR_NUM    (1U)
+#define TEST_BUF_SIZE   (TEST_SECTOR_SIZE*TEST_SECTOR_NUM)
+
+uint8_t test_write_buf[TEST_BUF_SIZE];
+uint8_t test_read_buf[TEST_BUF_SIZE];
+uint8_t test_done = false;
+#endif
+
+
+
+
+void setup(void)
+{
+#if USB_CDC_TEST
+  //USB CDC Test
+  UsbSerial.begin(115200);
+#endif
+#if USB_MSC_TEST
+  //USB MSC Test
+  udisk.Init(0,0,false);
+  Serial3.begin(115200);
+  Serial3.printf("serial3 test\r\n");
+#endif
+#if SD_SCREEN_FALSH_TEST 
+  class SPISettings spiConfig;
+  uint8_t rxBusyCommand[2] = {0x05,0xff};
+  // uint8_t rx[2];
+
+  spiConfig = SPISettings(500000,kSPI_MsbFirst,SPI_MODE0,false);
+  HS_SPI.beginTransaction(spiConfig);
+  HS_SPI.transfer(rxBusyCommand,2);
+  // HS_SPI.readRxbuffer(rx,2);
+
+  SPI_wifi.beginTransaction(spiConfig);
+  SPI_wifi.transfer(rxBusyCommand,2);
+
+  SPI_flash.beginTransaction(spiConfig);
+  SPI_flash.transfer(rxBusyCommand,2);
+
+  SPI_4.beginTransaction(spiConfig);
+  SPI_4.transfer(rxBusyCommand,2);
+#endif
+}
+#endif
 
 /**
  * The main Marlin program loop
@@ -1645,8 +1775,11 @@ void setup() {
  *    card, host, or by direct injection. The queue will continue to fill
  *    as long as idle() or manage_inactivity() are being called.
  */
+
+#if MARLIN_FUNC
 void loop() {
   do {
+    
     idle();
 
     #if ENABLED(SDSUPPORT)
@@ -1666,3 +1799,53 @@ void loop() {
 
   } while (ENABLED(__AVR__)); // Loop forever on slower (AVR) boards
 }
+
+
+#else
+void loop()
+{
+#if USB_CDC_TEST
+  //USB CDC Test
+  if(UsbSerial.available())
+  {
+    UsbSerial.write(UsbSerial.read());
+  }  
+#endif
+
+#if USB_MSC_TEST
+  // USB MSC Test
+  // put your main code here, to run repeatedly:
+    // Serial3.printf("\r\nUSB MSC Test\r\n");
+  if(udisk.LUNIsGood(0) && !test_done){
+    for(int i=0;i<TEST_BUF_SIZE/2;i++){
+      *(((uint16_t*)test_write_buf)+i) = i;
+    }
+    Serial3.printf("Write %d bytes start from sector %d\r\n",TEST_BUF_SIZE,TEST_SECTOR_START_ADDR);
+    Serial3.printf("\r\nData To Write:\r\n");
+    for(int i=0;i<TEST_BUF_SIZE;i++){
+      if(i%8 == 0)Serial3.printf("\r\n");
+      Serial3.printf("%03d  ",test_write_buf[i]);
+    }
+    Serial3.printf("\r\n\r\n");    
+    if(!udisk.Write(0,TEST_SECTOR_START_ADDR,TEST_SECTOR_SIZE,TEST_SECTOR_NUM,test_write_buf)){
+      if(!udisk.Read(0,TEST_SECTOR_START_ADDR,TEST_SECTOR_SIZE,TEST_SECTOR_NUM,test_read_buf)){
+        Serial3.printf("\r\nData read back:\r\n");
+        for(int i=0;i<TEST_BUF_SIZE;i++){
+          if(i%8 == 0)Serial3.printf("\r\n");
+          Serial3.printf("%03d  ",test_read_buf[i]);
+        }
+        Serial3.printf("\r\n\r\n");
+      }else{
+        Serial3.printf("Read failed\r\n");
+      }
+    }else{
+      Serial3.printf("Write failed\r\n");
+    }
+    test_done = true;
+  }
+#endif
+}
+#endif
+
+
+

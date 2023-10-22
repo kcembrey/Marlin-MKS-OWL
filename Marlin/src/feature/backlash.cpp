@@ -64,6 +64,7 @@ Backlash backlash;
  */
 
 void Backlash::add_correction_steps(const int32_t &da, const int32_t &db, const int32_t &dc, const axis_bits_t dm, block_t * const block) {
+  static axis_bits_t last_direction_bits;
   axis_bits_t changed_dir = last_direction_bits ^ dm;
   // Ignore direction change unless steps are taken in that direction
   #if DISABLED(CORE_BACKLASH) || EITHER(MARKFORGED_XY, MARKFORGED_YX)

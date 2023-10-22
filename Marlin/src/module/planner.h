@@ -76,6 +76,10 @@
   #include "../feature/closedloop.h"
 #endif
 
+#if ENABLED(EXTERNAL_CLOSED_LOOP_CONTROLLER)
+  #include "../feature/closedloop.h"
+#endif
+
 // Feedrate for manual moves
 #ifdef MANUAL_FEEDRATE
   constexpr xyze_feedrate_t _mf = MANUAL_FEEDRATE,
@@ -942,7 +946,7 @@ class Planner {
     static void finish_and_disable();
 
     // Periodic handler to manage the cleaning buffer counter
-    // Called from the Temperature ISR at ~1kHz
+    // Called from the Temperature ISR at ~1KHz
     static void isr() { if (cleaning_buffer_counter) --cleaning_buffer_counter; }
 
     /**

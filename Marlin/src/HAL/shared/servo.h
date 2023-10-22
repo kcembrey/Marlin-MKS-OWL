@@ -80,6 +80,8 @@
   #include "../STM32/Servo.h"
 #elif defined(ARDUINO_ARCH_ESP32)
   #include "../ESP32/Servo.h"
+#elif 1// defined(LPC5528)
+  #include "../lpc5528/Servo.h"
 #else
   #include <stdint.h>
 

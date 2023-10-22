@@ -81,6 +81,10 @@ lcd_uint_t lcd_put_u8str_P(PGM_P const ptpl, const int8_t ind, const char *cstr/
       lcd_put_lchar(AXIS_CHAR(ind));
       n--;
     }
+    else if (ch == '@') {
+      lcd_put_wchar(axis_codes[ind]);
+      n--;
+    }
     else {
       lcd_put_lchar(wc);
       n -= wc > 255 ? prop : 1;

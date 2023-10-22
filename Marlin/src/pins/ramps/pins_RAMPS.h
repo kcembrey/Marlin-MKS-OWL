@@ -484,6 +484,23 @@
 #define AUX4_17_PIN                           17
 #define AUX4_18_PIN                           16
 
+#define AUX4_03_PIN                           32
+#define AUX4_04_PIN                           47
+#define AUX4_05_PIN                           45
+#define AUX4_06_PIN                           43
+#define AUX4_07_PIN                           41
+#define AUX4_08_PIN                           39
+#define AUX4_09_PIN                           37
+#define AUX4_10_PIN                           35
+#define AUX4_11_PIN                           33
+#define AUX4_12_PIN                           31
+#define AUX4_13_PIN                           29
+#define AUX4_14_PIN                           27
+#define AUX4_15_PIN                           25
+#define AUX4_16_PIN                           23
+#define AUX4_17_PIN                           17
+#define AUX4_18_PIN                           16
+
 /**
  * LCD adapters come in different variants. The socket keys can be
  * on either side, and may be backwards on some boards / displays.

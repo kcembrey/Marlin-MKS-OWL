@@ -657,6 +657,12 @@ class Temperature {
     #if HAS_TEMP_REDUNDANT
       static celsius_float_t analog_to_celsius_redundant(const raw_adc_t raw);
     #endif
+    #if HAS_TEMP_BOARD
+      static celsius_float_t analog_to_celsius_board(const int16_t raw);
+    #endif
+    #if HAS_TEMP_REDUNDANT
+      static celsius_float_t analog_to_celsius_redundant(const int16_t raw);
+    #endif
 
     #if HAS_FAN
 

@@ -84,7 +84,7 @@ static void _eeprom_begin(uint8_t * const pos) {
 void eeprom_write_byte(uint8_t *pos, uint8_t value) {
   _eeprom_begin(pos);
   Wire.write(value);
-  Wire.endTransmission();
+  Wire.endTransmission(1);
 
   // wait for write cycle to complete
   // this could be done more efficiently with "acknowledge polling"

@@ -376,6 +376,7 @@
 #elif EITHER(MKS_MINI_12864_V3, BTT_MINI_12864_V1)
   #define _LCD_CONTRAST_MIN  255
   #define _LCD_CONTRAST_INIT 255
+  #define _LCD_CONTRAST_MAX  255
 #elif ENABLED(FYSETC_MINI_12864)
   #define _LCD_CONTRAST_MIN  180
   #define _LCD_CONTRAST_INIT 220
@@ -457,6 +458,11 @@
         #define SD_DETECT_STATE LOW
       #endif
     #endif
+  #endif
+
+  // Extender cable doesn't support SD_DETECT_PIN
+  #if ENABLED(NO_SD_DETECT)
+    #undef SD_DETECT_PIN
   #endif
 
   #if DISABLED(USB_FLASH_DRIVE_SUPPORT) || BOTH(MULTI_VOLUME, VOLUME_SD_ONBOARD)

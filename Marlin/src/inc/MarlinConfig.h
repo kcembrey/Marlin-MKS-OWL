@@ -42,7 +42,7 @@
 
 #ifndef __MARLIN_DEPS__
 
-  #include HAL_PATH(../HAL, inc/Conditionals_post.h)
+  // #include HAL_PATH(../HAL, inc/Conditionals_post.h)  // sola-2022-01-11
 
   #include "../core/types.h"  // Ahead of sanity-checks
 
@@ -53,7 +53,7 @@
   #include "../core/language.h"
   #include "../core/utility.h"
   #include "../core/serial.h"
-
+  #include "../HAL/LPC5528/fastio.h"
 #endif
 
 #include "../core/multi_language.h"

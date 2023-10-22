@@ -204,6 +204,9 @@ inline int lcd_put_u8str(FSTR_P const fstr) { return lcd_put_u8str_P(FTOP(fstr))
 inline int lcd_put_u8str(const lcd_uint_t col, const lcd_uint_t row, FSTR_P const fstr) {
   return lcd_put_u8str_P(col, row, FTOP(fstr));
 }
+inline lcd_uint_t lcd_put_u8str_ind(const lcd_uint_t col, const lcd_uint_t row, FSTR_P const fstr, const int8_t ind, FSTR_P const inFstr=nullptr, const lcd_uint_t maxlen=LCD_WIDTH) {
+  return lcd_put_u8str_ind_P(col, row, FTOP(fstr), ind, FTOP(inFstr), maxlen);
+}
 
 /**
  * @brief Draw a string with optional substitution

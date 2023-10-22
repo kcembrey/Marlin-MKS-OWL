@@ -173,6 +173,8 @@ void MarlinUI::goto_screen(screenFunc_t screen, const uint16_t encoder/*=0*/, co
 
     TERN_(IS_DWIN_MARLINUI, did_first_redraw = false);
 
+    TERN_(IS_DWIN_MARLINUI, did_first_redraw = false);
+
     TERN_(HAS_TOUCH_BUTTONS, repeat_delay = BUTTON_DELAY_MENU);
 
     TERN_(LCD_SET_PROGRESS_MANUALLY, progress_reset());

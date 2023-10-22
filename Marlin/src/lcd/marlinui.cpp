@@ -147,6 +147,33 @@ constexpr uint8_t epps = ENCODER_PULSES_PER_STEP;
     //TERN_(HAS_HEATED_CHAMBER, if (TEST(pmask, PT_CHAMBER)) thermalManager.setTargetBed(pre.chamber_temp));
     TERN_(HAS_FAN,              if (TEST(pmask, PT_FAN))     thermalManager.set_fan_speed(0, pre.fan_speed));
   }
+
+  void MarlinUI::apply_preheat(const uint8_t m, const uint8_t pmask, const uint8_t e/*=active_extruder*/) {
+    const preheat_t &pre = material_preset[m];
+    TERN_(HAS_HOTEND,           if (TEST(pmask, PT_HOTEND))  thermalManager.setTargetHotend(pre.hotend_temp, e));
+    TERN_(HAS_HEATED_BED,       if (TEST(pmask, PT_BED))     thermalManager.setTargetBed(pre.bed_temp));
+    //TERN_(HAS_HEATED_CHAMBER, if (TEST(pmask, PT_CHAMBER)) thermalManager.setTargetBed(pre.chamber_temp));
+    TERN_(HAS_FAN,              if (TEST(pmask, PT_FAN))     thermalManager.set_fan_speed(0, pre.fan_speed));
+  }
+#endif
+
+#if EITHER(HAS_LCD_MENU, EXTENSIBLE_UI)
+  bool MarlinUI::lcd_clicked;
+#endif
+
+#if EITHER(HAS_WIRED_LCD, DWIN_CREALITY_LCD_JYERSUI)
+
+  bool MarlinUI::get_blink() {
+    static uint8_t blink = 0;
+    static millis_t next_blink_ms = 0;
+    millis_t ms = millis();
+    if (ELAPSED(ms, next_blink_ms)) {
+      blink ^= 0xFF;
+      next_blink_ms = ms + 1000 - (LCD_UPDATE_INTERVAL) / 2;
+    }
+    return blink != 0;
+  }
+
 #endif
 
 #if EITHER(HAS_MARLINUI_MENU, EXTENSIBLE_UI)
@@ -1443,7 +1470,6 @@ void MarlinUI::init() {
     #if SERVICE_INTERVAL_3 > 0
       static PGMSTR(service3, "> " SERVICE_NAME_3 "!");
     #endif
-
     FSTR_P msg;
     if (printingIsPaused())
       msg = GET_TEXT_F(MSG_PRINT_PAUSED);

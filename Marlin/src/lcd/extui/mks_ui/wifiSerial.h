@@ -19,7 +19,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+<<<<<<<< HEAD:Marlin/src/lcd/extui/mks_ui/wifiSerial.h
 #pragma once
+========
+
+#include "../platforms.h"
+
+#ifdef HAL_STM32
+>>>>>>>> MKS-OWL:Marlin/src/HAL/STM32/watchdog.cpp
 
 #ifdef SERIAL_PORT_2
   #error "SERIAL_PORT_2 must be disabled with TFT_LVGL_UI* and MKS_WIFI_MODULE."
@@ -40,5 +47,23 @@
   #include "wifiSerial_STM32.h"
 #endif
 
+<<<<<<<< HEAD:Marlin/src/lcd/extui/mks_ui/wifiSerial.h
 extern WifiSerial WifiSerial1;
 #define WIFISERIAL WifiSerial1
+========
+void watchdog_init() {
+  #if DISABLED(DISABLE_WATCHDOG_INIT)
+    IWatchdog.begin(WDT_TIMEOUT_US);
+  #endif
+}
+
+void HAL_watchdog_refresh() {
+  IWatchdog.reload();
+  #if DISABLED(PINS_DEBUGGING) && PIN_EXISTS(LED)
+    TOGGLE(LED_PIN);  // heartbeat indicator
+  #endif
+}
+
+#endif // USE_WATCHDOG
+#endif // HAL_STM32
+>>>>>>>> MKS-OWL:Marlin/src/HAL/STM32/watchdog.cpp
