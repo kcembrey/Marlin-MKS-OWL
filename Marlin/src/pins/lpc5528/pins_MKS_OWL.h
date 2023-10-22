@@ -23,7 +23,7 @@
    #define I2C_EEPROM      // EEPROM on I2C-0
 #endif
 
-#if EITHER(NO_EEPROM_SELECTED,I2C_EEPROM)
+#if ANY(NO_EEPROM_SELECTED,I2C_EEPROM)
   #define I2C_EEPROM
   #define USE_SHARED_EEPROM
   #define MARLIN_EEPROM_SIZE 0x1000 // 4KB
@@ -84,8 +84,8 @@
     #define HEATER_1_PIN                    P0_17   
   #endif
 #endif
-#ifndef FAN_PIN
-  #define FAN_PIN                           P0_01   // FAN
+#ifndef FAN0_PIN
+  #define FAN0_PIN                           P0_01   // FAN
 #endif
 #ifndef HEATER_BED_PIN
   #define HEATER_BED_PIN                    P1_09
@@ -230,8 +230,9 @@
 //
 // SPI Flash
 //
-#define HAS_SPI_FLASH                             1
-#if HAS_SPI_FLASH
+#define SPI_FLASH
+#if ENABLED(SPI_FLASH)
+  #define SPI_DEVICE                           2  // Maple
   #define SPI_FLASH_SIZE                          0x1000000  // 16MB
   #define SPI_FLASH_CS_PIN                        P1_19
   #define SPI_FLASH_MOSI_PIN                      P0_29

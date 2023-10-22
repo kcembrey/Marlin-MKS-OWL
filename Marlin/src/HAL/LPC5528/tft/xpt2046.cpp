@@ -83,13 +83,13 @@ uint16_t XPT2046::getRawData(const XPTCoordinate coordinate) {
   class SPISettings spiConfig;
   spiConfig = SPISettings(2000000,kSPI_MsbFirst,SPI_MODE3,kSPI_Data8Bits,false);
   SPIx.beginTransaction(spiConfig);
-  DataTransferBegin();
+  dataTransferBegin();
   for (uint16_t i = 0; i < 3 ; i++) {
     data[i] = IO(coordinate);
     data[i] = (IO() << 4) | (IO() >> 4);
   }
 
-  DataTransferEnd();
+  dataTransferEnd();
 
   uint16_t delta01 = delta(data[0], data[1]),
            delta02 = delta(data[0], data[2]),
