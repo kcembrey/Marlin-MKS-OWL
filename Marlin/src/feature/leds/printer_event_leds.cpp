@@ -38,6 +38,8 @@ PrinterEventLEDs printerEventLEDs;
 
 #if HAS_TEMP_HOTEND || HAS_HEATED_BED
 
+extern long map(long x, long in_min, long in_max, long out_min, long out_max);
+
   uint8_t PrinterEventLEDs::old_intensity = 0;
 
   inline uint8_t pel_intensity(const celsius_t start, const celsius_t current, const celsius_t target) {

@@ -55,6 +55,8 @@
 
 typedef bool (*statusResetFunc_t)();
 
+typedef bool (*statusResetFunc_t)();
+
 #if HAS_WIRED_LCD
 
   enum LCDViewAction : uint8_t {
@@ -401,7 +403,6 @@ public:
 
     static statusResetFunc_t status_reset_callback;
     static void set_status_reset_fn(const statusResetFunc_t fn=nullptr) { status_reset_callback = fn; }
-
   #else
 
     #define MAX_MESSAGE_LENGTH 1
@@ -605,6 +606,7 @@ public:
 
     #if IS_DWIN_MARLINUI
       static bool did_first_redraw;
+      static bool old_is_printing;
     #endif
 
     #if ANY(BABYSTEP_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)

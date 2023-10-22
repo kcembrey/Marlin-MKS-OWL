@@ -20,8 +20,16 @@
  *
  */
 
+<<<<<<<< HEAD:Marlin/src/HAL/SAMD21/inc/Conditionals_adv.h
 /**
  * SAMD21 HAL developed by Bart Meijer (brupje)
  * Based on SAMD51 HAL by Giuliano Zaro (AKA GMagician)
  */
 #pragma once
+========
+#define BOARD_INFO_NAME      "BTT SKR SE BX V2.0"
+
+#define SAFE_POWER_PIN                      PI11
+
+#include "pins_BTT_SKR_SE_BX_common.h"
+>>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32h7/pins_BTT_SKR_SE_BX_V2.h

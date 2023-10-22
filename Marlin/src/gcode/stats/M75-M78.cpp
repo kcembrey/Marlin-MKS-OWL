@@ -49,6 +49,7 @@ void GcodeSuite::M75() {
 void GcodeSuite::M76() {
   TERN(DWIN_LCD_PROUI, ui.pause_print(), print_job_timer.pause());
   TERN_(HOST_PAUSE_M76, hostui.pause());
+  TERN_(DWIN_LCD_PROUI, DWIN_Print_Pause());
 }
 
 /**

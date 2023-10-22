@@ -38,6 +38,14 @@
   #include "../../module/tool_change.h"
 #endif
 
+#if HAS_PTC
+  #include "../../feature/probe_temp_comp.h"
+#endif
+
+#if ENABLED(DWIN_LCD_PROUI)
+  #include "../../lcd/marlinui.h"
+#endif
+
 /**
  * G30: Do a single Z probe at the given XY (default: current)
  *

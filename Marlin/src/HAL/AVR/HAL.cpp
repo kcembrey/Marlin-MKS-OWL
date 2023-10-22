@@ -95,6 +95,8 @@ void MarlinHAL::init() {
 
     OUT_WRITE(BEEPER_PIN, LOW);
   #endif
+
+  init_pwm_timers();   // Init user timers to default frequency - 1000HZ
 }
 
 void MarlinHAL::reboot() {

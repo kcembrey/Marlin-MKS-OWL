@@ -1394,6 +1394,9 @@
 #else
   #define V_E_INDEX U_E_INDEX
 #endif
+#if NONE(USE_KMIN_PLUG, USE_KMAX_PLUG)
+  #undef K_STOP_PIN
+#endif
 
 // The U axis, if any, should be the next open extruder port
 #if HAS_U_AXIS

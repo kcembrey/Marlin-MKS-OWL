@@ -1,6 +1,14 @@
 /**
  * Marlin 3D Printer Firmware
+<<<<<<< HEAD
  * Copyright (c) 2022 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+=======
+<<<<<<<< HEAD:Marlin/src/lcd/tft/ui_theme.h
+ * Copyright (c) 2023 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+========
+ * Copyright (c) 2022 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
+>>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32f4/pins_CREALITY_V24S1_301F4.h
+>>>>>>> MKS-OWL-2.097
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -21,8 +29,27 @@
  */
 #pragma once
 
+<<<<<<< HEAD
 /**
  * Creality V24S1_301F4 (STM32F401RC) board pin assignments as found on Ender-3 S1.
+=======
+<<<<<<<< HEAD:Marlin/src/lcd/tft/ui_theme.h
+#include "../../inc/MarlinConfigPre.h"
+
+#ifndef TFT_THEME
+  #define TFT_THEME BLUE_MARLIN
+#endif
+
+#define TFT_THEME_INCL_(M) STRINGIFY_(themes/theme_##M.h)
+#define TFT_THEME_INCL(M) TFT_THEME_INCL_(M)
+
+#include "tft_color.h"
+#include TFT_THEME_INCL(TFT_THEME)
+#include "themes/theme_default.h"
+========
+/**
+ * Creality V24S1_301F4 (STM32F401RC) board pin assignments as found on Ender 3 S1.
+>>>>>>> MKS-OWL-2.097
  */
 
 #ifndef BOARD_INFO_NAME
@@ -36,3 +63,7 @@
 #define ALLOW_STM32F4
 
 #include "../stm32f1/pins_CREALITY_V24S1_301.h"
+<<<<<<< HEAD
+=======
+>>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32f4/pins_CREALITY_V24S1_301F4.h
+>>>>>>> MKS-OWL-2.097

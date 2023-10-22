@@ -19,8 +19,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+<<<<<<< HEAD
 #pragma once
 
+=======
+
+/**
+ * SAMD21 HAL developed by Bart Meijer (brupje)
+ * Based on SAMD51 HAL by Giuliano Zaro (AKA GMagician)
+ */
+#pragma once
+
+<<<<<<<< HEAD:Marlin/src/HAL/SAMD21/MarlinSPI.h
+#include <SPI.h>
+
+using MarlinSPI = SPIClass;
+========
+>>>>>>> MKS-OWL-2.097
 /**
  * CREALITY v4.2.2 (STM32F103RE / STM32F103RC) board pin assignments
  */
@@ -28,6 +43,11 @@
 #define BOARD_INFO_NAME      "Creality v4.2.2"
 #define DEFAULT_MACHINE_NAME "Creality3D"
 
+<<<<<<< HEAD
 #define EMIT_CREALITY_422_WARNING
 
 #include "pins_CREALITY_V4.h"
+=======
+#include "pins_CREALITY_V4.h"
+>>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32f1/pins_CREALITY_V422.h
+>>>>>>> MKS-OWL-2.097

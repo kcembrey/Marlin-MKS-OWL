@@ -43,6 +43,12 @@
 #define MOSFET_C_PIN                           8  // HBED
 #define FAN0_PIN                               9  // FAN Part Cooling
 
+// Hotend, Hotend, Bed + Fan on D9
+#if FET_ORDER_EEB
+  #define MOSFET_B_PIN 7
+  #define FAN_PIN 9
+#endif
+
 //
 // CS Pins wired to avoid conflict with the LCD
 // See https://www.thingiverse.com/asset:66604

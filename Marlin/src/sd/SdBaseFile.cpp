@@ -447,6 +447,10 @@ bool SdBaseFile::mkdir(SdBaseFile *parent, const char *path, const bool pFlag/*=
     uint8_t dlname[LONG_FILENAME_LENGTH];
   #endif
 
+  #if ENABLED(LONG_FILENAME_WRITE_SUPPORT)
+    uint8_t dlname[LONG_FILENAME_LENGTH];
+  #endif
+
   if (!parent || isOpen()) return false;
 
   if (*path == '/') {
@@ -1439,7 +1443,10 @@ int8_t SdBaseFile::readDir(dir_t * const dir, char * const longFilename) {
 
   // If we have a longFilename buffer, mark it as invalid.
   // If a long filename is found it will be filled automatically.
-  if (longFilename) INVALIDATE_LONGNAME();
+  if (longFilename) {
+    INVALIDATE_LONGNAME();
+    TERN0(HAS_TFT_LVGL_UI, lv_longFilename[0] = '\0');
+  }
 
   uint8_t checksum_error = 0xFF, checksum = 0;
 
@@ -1453,7 +1460,10 @@ int8_t SdBaseFile::readDir(dir_t * const dir, char * const longFilename) {
 
     // Skip deleted entry and entry for . and ..
     if (dir->name[0] == DIR_NAME_DELETED || dir->name[0] == '.') {
-      if (longFilename) INVALIDATE_LONGNAME();   // Invalidate erased file long name, if any
+      if (longFilename) {
+        INVALIDATE_LONGNAME();   // Invalidate erased file long name, if any
+        TERN0(HAS_TFT_LVGL_UI, lv_longFilename[0] = '\0');
+      }
       continue;
     }
 

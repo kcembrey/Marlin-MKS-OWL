@@ -120,6 +120,14 @@
   #define HEATER_1_PIN                      PB0
 #endif
 
+#if HOTENDS == 1 && DISABLED(HEATERS_PARALLEL)
+  #ifndef FAN1_PIN
+    #define FAN1_PIN                        PB0
+  #endif
+#elif !defined(HEATER_1_PIN)
+  #define HEATER_1_PIN                      PB0
+#endif
+
 //
 // Power Supply Control
 //

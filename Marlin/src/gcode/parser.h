@@ -34,6 +34,11 @@
   #include "../libs/hex_print.h"
 #endif
 
+//fix-wang 
+#ifndef constrain
+#define constrain(value, arg_min, arg_max) ((value) < (arg_min) ? (arg_min) :((value) > (arg_max) ? (arg_max) : (value)))
+#endif
+
 #if ENABLED(TEMPERATURE_UNITS_SUPPORT)
   typedef enum : uint8_t { TEMPUNIT_C, TEMPUNIT_K, TEMPUNIT_F } TempUnit;
 #endif

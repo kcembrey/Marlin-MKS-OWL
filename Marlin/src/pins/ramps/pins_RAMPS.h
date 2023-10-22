@@ -738,7 +738,7 @@
         #define SD_DETECT_PIN        EXP2_07_PIN
       #endif
 
-    #elif ANY(VIKI2, miniVIKI)
+    #elif EITHER(VIKI2, miniVIKI)
 
       #define DOGLCD_CS              AUX4_05_PIN
       #define DOGLCD_A0              AUX2_07_PIN

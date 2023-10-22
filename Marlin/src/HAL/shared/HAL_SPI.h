@@ -29,6 +29,11 @@
 #include "Marduino.h"
 #include <stdint.h>
 
+// redefine for LPC5528 Library
+#ifndef byte
+typedef uint8_t byte;
+#endif
+
 /**
  * SPI speed where 0 <= index <= 6
  *

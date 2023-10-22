@@ -33,3 +33,5 @@
 #undef ALLOW_STM32F4
 
 #endif
+
+#undef ALLOW_STM32F4

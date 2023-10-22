@@ -20,6 +20,7 @@
  *
  */
 
+<<<<<<<< HEAD:Marlin/src/HAL/SAMD21/u8g/LCD_I2C_routines.cpp
 /**
  * SAMD21 HAL developed by Bart Meijer (brupje)
  * Based on SAMD51 HAL by Giuliano Zaro (AKA GMagician)
@@ -30,3 +31,28 @@
 #ifdef __SAMD21__
 
 #endif // __SAMD21__
+========
+#include "../../inc/MarlinConfigPre.h"
+
+#ifdef HAS_LPC55XX
+
+#include <pwm.h>
+
+#ifndef pin_t
+typedef int16_t pin_t;
+#endif
+
+void set_pwm_duty(const pin_t pin, const uint16_t v, const uint16_t v_size/*=255*/, const bool invert/*=false*/) {
+
+}
+
+#if NEEDS_HARDWARE_PWM // Specific meta-flag for features that mandate PWM
+
+  void set_pwm_frequency(const pin_t pin, int f_desired) {
+
+  }
+
+#endif
+
+#endif // LPC5528
+>>>>>>>> MKS-OWL-2.097:Marlin/src/HAL/LPC5528/fast_pwm.cpp

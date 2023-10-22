@@ -44,6 +44,7 @@
  * Spindle:
  *  M3 - Spindle ON (Clockwise)
  *  M4 - Spindle ON (Counter-clockwise)
+ *  M5 - Spindle OFF
  *
  * Parameters:
  *  S<power> - Set power. S0 will turn the spindle/laser off.

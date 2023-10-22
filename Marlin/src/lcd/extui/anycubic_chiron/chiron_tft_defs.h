@@ -72,7 +72,6 @@ namespace Anycubic {
     AC_printer_stopping,
     AC_printer_resuming_from_power_outage
   };
-
   enum panel_type_t : uint8_t { // order is important here as we assume new panel if type is unknown
     AC_panel_unknown,
     AC_panel_new,

@@ -52,6 +52,12 @@ DGUSDisplay dgus;
   #define DEBUGLCDCOMM_ECHOPGM(...) NOOP
 #endif
 
+#ifdef DEBUG_DGUSLCD_COMM
+  #define DEBUGLCDCOMM_ECHOPGM DEBUG_ECHOPGM
+#else
+  #define DEBUGLCDCOMM_ECHOPGM(...) NOOP
+#endif
+
 // Preamble... 2 Bytes, usually 0x5A 0xA5, but configurable
 constexpr uint8_t DGUS_HEADER1 = 0x5A;
 constexpr uint8_t DGUS_HEADER2 = 0xA5;

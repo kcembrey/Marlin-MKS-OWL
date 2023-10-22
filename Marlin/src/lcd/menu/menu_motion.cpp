@@ -146,6 +146,7 @@ void _goto_manual_move(const_float_t scale) {
 void _menu_move_distance(const AxisEnum axis, const screenFunc_t func, const int8_t eindex=active_extruder) {
   ui.manual_move.screen_ptr = func;
   START_MENU();
+
   if (LCD_HEIGHT >= 4) {
     if (axis < NUM_AXES)
       STATIC_ITEM_N(axis, MSG_MOVE_N, SS_DEFAULT|SS_INVERT);

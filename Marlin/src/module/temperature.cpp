@@ -722,6 +722,8 @@ volatile bool Temperature::raw_temps_ready = false;
 
     LCD_MESSAGE(MSG_HEATING);
 
+    LCD_MESSAGE(MSG_HEATING);
+
     // PID Tuning loop
     wait_for_heatup = true;
     while (wait_for_heatup) { // Can be interrupted with M108
@@ -2659,6 +2661,10 @@ void Temperature::updateTemperaturesFromRawValues() {
       else {
         TERN_(MULTI_MAX_CONSECUTIVE_LOW_TEMP_ERR, consecutive_low_temperature_error[e] = 0);
       }
+      #if MAX_CONSECUTIVE_LOW_TEMPERATURE_ERROR_ALLOWED > 1
+        else
+          consecutive_low_temperature_error[e] = 0;
+      #endif
     }
 
   #endif // HAS_HOTEND
@@ -2803,6 +2809,10 @@ void Temperature::init() {
         LOW
       #endif
     ));
+  #endif
+
+  #if ENABLED(MPCTEMP)
+    HOTEND_LOOP() temp_hotend[e].modeled_block_temp = NAN;
   #endif
 
   #if ENABLED(MPCTEMP)

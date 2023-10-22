@@ -26,6 +26,17 @@
  */
 #pragma once
 
+<<<<<<<< HEAD:Marlin/src/HAL/SAMD21/MarlinSPI.h
 #include <SPI.h>
 
 using MarlinSPI = SPIClass;
+========
+/**
+ * CREALITY v4.2.2 (STM32F103RE / STM32F103RC) board pin assignments
+ */
+
+#define BOARD_INFO_NAME      "Creality v4.2.2"
+#define DEFAULT_MACHINE_NAME "Creality3D"
+
+#include "pins_CREALITY_V4.h"
+>>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32f1/pins_CREALITY_V422.h

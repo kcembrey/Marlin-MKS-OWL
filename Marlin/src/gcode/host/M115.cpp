@@ -171,6 +171,11 @@ void GcodeSuite::M115() {
       cap_line(F("MULTI_VOLUME"), ENABLED(MULTI_VOLUME));
     #endif
 
+    // MULTI_VOLUME (M21 S/M21 U)
+    #if ENABLED(SDSUPPORT)
+      cap_line(F("MULTI_VOLUME"), ENABLED(MULTI_VOLUME));
+    #endif
+
     // REPEAT (M808)
     cap_line(F("REPEAT"), ENABLED(GCODE_REPEAT_MARKERS));
 

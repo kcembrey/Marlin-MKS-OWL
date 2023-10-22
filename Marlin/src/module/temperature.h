@@ -485,6 +485,9 @@ struct PIDHeaterInfo : public HeaterInfo {
 #if HAS_TEMP_SOC
   typedef temp_info_t soc_info_t;
 #endif
+#if HAS_TEMP_BOARD
+  typedef temp_info_t board_info_t;
+#endif
 
 // Heater watch handling
 template <int INCREASE, int HYSTERESIS, millis_t PERIOD>
@@ -1279,6 +1282,10 @@ class Temperature {
       static void MPC_autotune(const uint8_t e, MPCTuningType tuning_type);
 
     #endif // MPC_AUTOTUNE
+
+    #if ENABLED(MPCTEMP)
+      void MPC_autotune();
+    #endif
 
     #if ENABLED(PROBING_HEATERS_OFF)
       static void pause_heaters(const bool p);

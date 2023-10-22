@@ -21,6 +21,7 @@
  */
 #pragma once
 
+<<<<<<< HEAD
 /**
  * Mesh Viewer for PRO UI
  * Author: Miguel A. Risco-Castillo (MRISCOC)
@@ -40,3 +41,42 @@ public:
 extern MeshViewer meshViewer;
 
 void gotoMeshViewer(const bool redraw);
+=======
+<<<<<<<< HEAD:Marlin/src/feature/x_twist.h
+#include "../inc/MarlinConfigPre.h"
+
+typedef float xatc_array_t[XATC_MAX_POINTS];
+
+class XATC {
+  static bool enabled;
+public:
+  static float spacing, start;
+  static xatc_array_t z_offset;
+
+  static void reset();
+  static void set_enabled(const bool ena) { enabled = ena; }
+  static float compensation(const xy_pos_t &raw);
+  static void print_points();
+};
+
+extern XATC xatc;
+========
+/**
+ * Mesh Viewer for PRO UI
+ * Author: Miguel A. Risco-Castillo (MRISCOC)
+ * version: 3.14.1
+ * Date: 2022/04/11
+ */
+
+class MeshViewerClass {
+public:
+  float max, min;
+  void Draw(bool withsave = false);
+  void DrawMesh(bed_mesh_t zval, const uint8_t sizex, const uint8_t sizey);
+};
+
+extern MeshViewerClass MeshViewer;
+
+void Goto_MeshViewer();
+>>>>>>>> MKS-OWL-2.097:Marlin/src/lcd/e3v2/proui/meshviewer.h
+>>>>>>> MKS-OWL-2.097
