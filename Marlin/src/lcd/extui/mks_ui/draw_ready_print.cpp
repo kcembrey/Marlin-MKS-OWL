@@ -182,10 +182,6 @@ void lv_draw_ready_print() {
 
     lv_obj_set_pos(det_info, 20, 145);
     lv_label_set_text(det_info, " ");
-
-    #if ENABLED(MKS_TEST)
-    mks_gpio_test();
-    #endif
   }
   else {
     lv_big_button_create(scr, "F:/bmp_tool.bin", main_menu.tool, 20, 90, event_handler, ID_TOOL);

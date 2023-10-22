@@ -20,10 +20,4 @@
  *
  */
 
-<<<<<<<< HEAD:Marlin/src/HAL/SAMD21/inc/Conditionals_LCD.h
 #pragma once
-========
-#define BOARD_INFO_NAME "BTT SKR V3 EZ"
-
-#include "pins_BTT_SKR_V3_0_common.h"
->>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32h7/pins_BTT_SKR_V3_0_EZ.h

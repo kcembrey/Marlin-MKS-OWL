@@ -22,7 +22,6 @@
 
 #include "../../../../inc/MarlinConfigPre.h"
 
-<<<<<<<< HEAD:Marlin/src/lcd/extui/dgus_e3s1pro/definition/DGUS_ScreenSetup.cpp
 #if ENABLED(DGUS_LCD_UI_E3S1PRO)
 
 #include "DGUS_ScreenSetup.h"
@@ -43,64 +42,3 @@ const struct DGUS_ScreenSetup screen_setup_list[] PROGMEM = {
 };
 
 #endif // DGUS_LCD_UI_E3S1PRO
-========
-#ifdef HAS_LPC55XX
-
-#include "../../inc/MarlinConfig.h"
-#include "MarlinSerial.h"
-
-
-
-#if USING_HW_SERIAL0
-    MarlinSerial _MSerial0(USART0);
-    MSerialT MSerial0(true, _MSerial0);
-#endif
-
-#if USING_HW_SERIAL1
-    MarlinSerial _MSerial1(USART1);
-    MSerialT MSerial1(true, _MSerial1);
-#endif
-
-#if USING_HW_SERIAL2
-    MarlinSerial _MSerial2(USART2);
-    MSerialT MSerial2(true, _MSerial2);
-#endif
-
-#if USING_HW_SERIAL3
-    MarlinSerial _MSerial3(USART3);
-    MSerialT MSerial3(true, _MSerial3);
-
-    extern "C" void FLEXCOMM3_IRQHandler() { 
-        _MSerial3.IRQHandler();
-    }
-
- #endif
-
-void MarlinSerial::begin(uint32_t baud) {
-    HardwareSerial::begin(baud);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#endif
->>>>>>>> MKS-OWL-2.097:Marlin/src/HAL/LPC5528/MarlinSerial.cpp

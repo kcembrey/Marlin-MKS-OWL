@@ -1,10 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
-<<<<<<<< HEAD:Marlin/src/lcd/extui/dgus_e3s1pro/definition/DGUS_ScreenAddrList.h
  * Copyright (c) 2023 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
-========
- * Copyright (c) 2021 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
->>>>>>>> MKS-OWL-2.097:Marlin/src/lcd/e3v2/proui/endstop_diag.h
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -25,7 +21,6 @@
  */
 #pragma once
 
-<<<<<<<< HEAD:Marlin/src/lcd/extui/dgus_e3s1pro/definition/DGUS_ScreenAddrList.h
 #include "../config/DGUS_Screen.h"
 #include "../config/DGUS_Addr.h"
 
@@ -35,19 +30,3 @@ struct DGUS_ScreenAddrList {
 };
 
 extern const struct DGUS_ScreenAddrList screen_addr_list_map[];
-========
-/**
- * DWIN End Stops diagnostic page for PRO UI
- * Author: Miguel A. Risco-Castillo (MRISCOC)
- * Version: 1.2.3
- * Date: 2022/02/24
- */
-
-class ESDiagClass {
-public:
-  void Draw();
-  void Update();
-};
-
-extern ESDiagClass ESDiag;
->>>>>>>> MKS-OWL-2.097:Marlin/src/lcd/e3v2/proui/endstop_diag.h

@@ -1,10 +1,6 @@
 /**
  * Marlin 3D Printer Firmware
-<<<<<<<< HEAD:Marlin/src/lcd/tft/ui_theme.h
  * Copyright (c) 2023 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
-========
- * Copyright (c) 2022 MarlinFirmware [https://github.com/MarlinFirmware/Marlin]
->>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32f4/pins_CREALITY_V24S1_301F4.h
  *
  * Based on Sprinter and grbl.
  * Copyright (c) 2011 Camiel Gubbels / Erik van der Zalm
@@ -25,7 +21,6 @@
  */
 #pragma once
 
-<<<<<<<< HEAD:Marlin/src/lcd/tft/ui_theme.h
 #include "../../inc/MarlinConfigPre.h"
 
 #ifndef TFT_THEME
@@ -38,20 +33,3 @@
 #include "tft_color.h"
 #include TFT_THEME_INCL(TFT_THEME)
 #include "themes/theme_default.h"
-========
-/**
- * Creality V24S1_301F4 (STM32F401RC) board pin assignments as found on Ender 3 S1.
- */
-
-#ifndef BOARD_INFO_NAME
-  #define BOARD_INFO_NAME "Creality V24S1-301F4"
-#endif
-#ifndef DEFAULT_MACHINE_NAME
-  #define DEFAULT_MACHINE_NAME "Ender-3 S1 F4"
-#endif
-
-#define DISABLE_DEBUG false // DISABLE_(DEBUG|JTAG) is not supported for STM32F4.
-#define ALLOW_STM32F4
-
-#include "../stm32f1/pins_CREALITY_V24S1_301.h"
->>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32f4/pins_CREALITY_V24S1_301F4.h

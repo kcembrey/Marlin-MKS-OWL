@@ -753,21 +753,10 @@ void GUI_RefreshPage() {
       }
       break;
     case PRINT_READY_UI:
-      #if ENABLED(MKS_TEST)
-      if (temps_update_flag && (mks_test_flag != 0x1E)) {
-        temps_update_flag = false;
-        lv_temp_refr();
-      }
-      else if(mks_test_flag == 0x1E)
-      {
-        mks_gpio_test();
-      }
-      #else
       if (temps_update_flag) {
         temps_update_flag = false;
         lv_temp_refr();
       }
-      #endif
       break;
 
     case PRINT_FILE_UI: break;

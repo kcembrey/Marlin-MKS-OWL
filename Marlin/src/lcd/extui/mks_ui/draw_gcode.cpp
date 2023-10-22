@@ -81,7 +81,7 @@ void lv_serial_capt_hook(void * userPointer, uint8_t c) {
 
 void lv_eom_hook(void *) {
   // Message is done, let's remove the hook now
-  // MYSERIAL1.setHook();
+  MYSERIAL1.setHook();
 }
 
 void lv_draw_gcode(bool clear) {

@@ -21,11 +21,5 @@
  */
 #pragma once
 
-<<<<<<<< HEAD:Marlin/src/tests/marlin_tests.h
 void runStartupTests();
 void runPeriodicTests();
-========
-#define BOARD_INFO_NAME "BTT SKR V3"
-
-#include "pins_BTT_SKR_V3_0_common.h"
->>>>>>>> MKS-OWL-2.097:Marlin/src/pins/stm32h7/pins_BTT_SKR_V3_0.h
