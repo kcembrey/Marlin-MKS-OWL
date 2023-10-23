@@ -1724,7 +1724,7 @@
     #define HAS_TFT_LVGL_UI_FSMC 1
   #endif
 #elif ENABLED(TFT_INTERFACE_SPI)
-  #define HAS_SPI_TFT 1
+  #define HAS_SPI_TFT 0
   #if TFT_SCALED_DOGLCD
     #define HAS_SPI_GRAPHICAL_TFT 1
   #elif HAS_TFT_LVGL_UI

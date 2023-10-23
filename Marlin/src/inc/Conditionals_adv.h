@@ -1061,7 +1061,7 @@
 
 // Full Touch Screen needs 'tft/xpt2046'
 #if ANY(TFT_TOUCH_DEVICE_XPT2046, HAS_TFT_LVGL_UI)
-  #define HAS_TFT_XPT2046 1
+  #define HAS_TFT_XPT2046 0
 #endif
 
 // Touch Screen or "Touch Buttons" need XPT2046 pins

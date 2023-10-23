@@ -230,7 +230,7 @@
 //
 // SPI Flash
 //
-#define SPI_FLASH
+// #define SPI_FLASH
 #if ENABLED(SPI_FLASH)
   #define SPI_DEVICE                              2  // Maple
   #define SPI_FLASH_SIZE                          0x1000000  // 16MB
