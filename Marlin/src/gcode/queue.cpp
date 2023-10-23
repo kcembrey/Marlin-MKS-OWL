@@ -36,7 +36,9 @@ GCodeQueue queue;
 #include "../module/temperature.h"
 #include "../MarlinCore.h"
 #include "../core/bug_on.h"
-
+// #if ENABLED(TFT_LVGL_UI)
+// #include "../Marlin/src/lcd/extui/mks_ui/draw_ui.h"
+// #endif
 #if ENABLED(PRINTER_EVENT_LEDS)
   #include "../feature/leds/printer_event_leds.h"
 #endif
@@ -279,6 +281,10 @@ void GCodeQueue::flush_and_request_resend(const serial_index_t serial_ind) {
   SERIAL_ECHOLNPGM(STR_RESEND, serial_state[serial_ind.index].last_N + 1);
   SERIAL_ECHOLNPGM(STR_OK);
 }
+
+// uint8_t av = 0;
+
+// #include "HardwareSerial.h"
 
 static bool serial_data_available(serial_index_t index) {
   const int a = SERIAL_IMPL.available(index);

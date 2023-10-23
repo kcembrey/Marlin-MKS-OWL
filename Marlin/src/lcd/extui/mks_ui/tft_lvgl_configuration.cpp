@@ -162,7 +162,7 @@ void tft_lvgl_init() {
     TERN_(MKS_TEST, mks_test_get());
   #endif
 
-  touch.init();
+  touch.Init();
 
   lv_init();
 

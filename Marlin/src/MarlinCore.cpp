@@ -39,7 +39,7 @@
 #endif
 
 #ifdef ARDUINO
-  #include <pins_arduino.h>
+  // #include <pins_arduino.h>
 #endif
 #include <math.h>
 

@@ -44,7 +44,7 @@
 
 #ifndef __MARLIN_DEPS__
 
-  #include HAL_PATH(.., inc/Conditionals_post.h)
+  // #include HAL_PATH(.., inc/Conditionals_post.h) //MKS-OWL workaround
 
   #include "../core/types.h"  // Ahead of sanity-checks
 
@@ -59,6 +59,7 @@
   #include "../core/serial.h"
   #include "../core/endianness.h"
 
+  #include "../HAL/LPC5528/fastio.h"
 #endif
 
 #include "../core/multi_language.h"

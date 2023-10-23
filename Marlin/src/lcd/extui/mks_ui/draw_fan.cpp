@@ -47,7 +47,7 @@ enum {
 uint8_t fanPercent = 0;
 static void event_handler(lv_obj_t *obj, lv_event_t event) {
   if (event != LV_EVENT_RELEASED) return;
-  const uint8_t temp = map(thermalManager.fan_speed[0], 0, 255, 0, 100);
+  const uint8_t temp = thermalManager.fan_speed[0];
   if (abs(fanPercent - temp) > 2) fanPercent = temp;
   switch (obj->mks_obj_id) {
     case ID_F_ADD: if (fanPercent < 100) fanPercent++; break;
@@ -57,7 +57,7 @@ static void event_handler(lv_obj_t *obj, lv_event_t event) {
     case ID_F_OFF:  fanPercent =   0; break;
     case ID_F_RETURN: goto_previous_ui(); return;
   }
-  thermalManager.set_fan_speed(0, map(fanPercent, 0, 100, 0, 255));
+  thermalManager.set_fan_speed(0, fanPercent);
   if (obj->mks_obj_id != ID_F_RETURN) disp_fan_value();
 }
 
